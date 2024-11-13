@@ -1,0 +1,15 @@
+version: "3.1"
+
+slots:
+  
+  author: 
+    type: text
+    mappings: 
+    - type: from_llm
+
+responses:
+  utter_ask_author:
+    - text: "What author would you like me to search for?"
+
+actions:
+  - action_get_random_author

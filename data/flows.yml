@@ -1,0 +1,7 @@
+flows:
+  ask_random_author:
+    description: user asks for a book recommendation
+    steps:
+      - collect: author
+      - action: action_get_random_author
+  

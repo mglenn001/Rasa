@@ -1,0 +1,19 @@
+test_cases:
+  - test_case: 91fc9caf461d4e2294d8ddeab28b0b67
+    steps:
+    - user: "hi"
+    - utter: utter_free_chitchat_response
+    - user: "can you recommend me a book"
+      assertions: 
+      - flow_started: "ask_random_author"
+    - utter: utter_ask_author_of_choice
+    - user: "jk rowling"
+    - bot: "Here is a random jk rowling book for you: 'Fantastic Beasts and Where to Find Them'."
+    - user: "4"
+    - utter: utter_transfer_complete
+      assertions:
+        - flow_completed:
+          flow_id: "ask_random_author"
+    - utter: utter_can_do_something_else
+    - user: "no"
+    - utter: utter_free_chitchat_response
