@@ -1,9 +1,9 @@
 import random
+import requests
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
-import requests
 
 
 class ActionCheckSufficientFunds(Action):
@@ -22,7 +22,7 @@ class ActionCheckSufficientFunds(Action):
         transfer_amount = tracker.get_slot("amount")
         has_sufficient_funds = transfer_amount <= balance
         return [SlotSet("has_sufficient_funds", has_sufficient_funds)]
-
+    
 class ActionGetRandomBookVolume(Action):
     def name(self) -> Text:
         return "action_get_random_author"
@@ -33,13 +33,13 @@ class ActionGetRandomBookVolume(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        api_url = "https://www.googleapis.com/books/v1/volumes"
-        author_of_choice = tracker.get_slot("author_of_choice")
+        api_url = "https://openlibrary.org/search.json"
+        author = tracker.get_slot("author")
 
         params = {
-            "q": f"inauthor:{author_of_choice}&authors:{author_of_choice}",  # Example search query
-            "langRestrict": "en",
-            "maxResults": 40         # Adjust as needed to get more volumes
+            "q": f"author:{author}",  # Example search query
+            "lang": "en",
+            "sort": "rating"
         }
 
         try:
@@ -48,20 +48,16 @@ class ActionGetRandomBookVolume(Action):
             response.raise_for_status()  # Raise an error for bad responses
             
             # Parse the JSON response
-            volumes = response.json().get("items", [])
+            volumes = response.json()["docs"][:5]
 
             if volumes:
                 # Select a random volume
                 random_volume = random.choice(volumes)
-                volume_title = random_volume['volumeInfo'].get('title', 'Unknown Title')
-                
-                dispatcher.utter_message(text=f"Here is a random {author_of_choice} book for you: '{volume_title}'.")
+                volume_title = random_volume.get("title", "Unknown Title")
+                return [SlotSet("book_recommendation", volume_title)]
+                #dispatcher.utter_message(text=f"Here is a random {author_of_choice} book for you: '{volume_title}'.")
             else:
-                dispatcher.utter_message(text=f"Sorry, I couldn't find any book volumes for {author_of_choice}.")
-            
-            return []
+                return [SlotSet("book_recommendation", None)]
 
         except requests.exceptions.RequestException as e:
-            # Handle any errors during the API request
-            dispatcher.utter_message(text="Sorry, something went wrong while fetching book volumes.")
-            return []
+            return [SlotSet("book_recommendation", None)]

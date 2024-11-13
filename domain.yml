@@ -1,7 +1,16 @@
 version: "3.1"
 
 slots:
-  
+  book_reccomendation:
+    type: text
+    mappings:
+      - type: from_llmm
+
+  book_request:
+    type: text
+    mappings:
+    - type: from_llm
+
   author: 
     type: text
     mappings: 
@@ -10,6 +19,13 @@ slots:
 responses:
   utter_ask_author:
     - text: "What author would you like me to search for?"
+  utter_give_book:
+    - text: "I found [book_reccomendation], would you like more information?"
+  utter_give_game_changers:
+    - text: "Seeing as you're a fun person that wants to be surprised,  I recommend Game Changer by Rachel Reid, my favourite book!!!"
+  
 
 actions:
   - action_get_random_author
+  - action_get_book_of_similar_genre
+  - action_get_book_other_people_liked

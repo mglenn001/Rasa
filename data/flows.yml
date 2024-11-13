@@ -1,7 +1,36 @@
 flows:
   ask_random_author:
-    description: user asks for a book recommendation
+    description: this flow reccomends the user a book written by the author they provide
     steps:
+      - action: utter_ask_author
       - collect: author
       - action: action_get_random_author
+      - action: utter_give_book
+        
+    
+  # recommend_book_of_similar_genre:
+  #   description: this flow reccomends the user a book that is is similar to a book they provide
+  #   steps:
+  #     - collect: book_request
+  #     - action: action_get_book_of_similar_genre
+  #     - action: utter_give_book
+
+    
+  # recommend_book_other_people_liked:
+  #   description: this flow recommends a book that people who enjoyed the book the user provides, also enjoyed
+  #   steps:
+  #     - collect: book_request
+  #     - action: action_get_book_other_people_liked
+  #     - action: utter_give_book
+
+  # recommend_surprise:
+  #   description: This flow gives a book recommendation if the user asks to be surprised
+  #   steps:
+  #     - action: utter_give_game_changers
   
+  # recommend_book_by_similar_author:
+  #   description: this flow reccomends the user a book by an author of a similar style as an author they provide
+  #   steps:
+  #     - collect: book_request
+  #     - action: action_get_book_of_similar_genre
+  #     - action: utter_give_book
