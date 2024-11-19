@@ -1,31 +1,47 @@
 version: "3.1"
 
 slots:
-  book_reccomendation:
+  book_recommendation:
     type: text
-    mappings:
-      - type: from_llmm
-
-  book_request:
+  book_description:
+    type: text
+  book_title:
     type: text
     mappings:
     - type: from_llm
-
   author: 
     type: text
     mappings: 
     - type: from_llm
+  wants_description:
+    type: bool
+    mappings:
+    - type: from_llm
+  location:
+    type: text
 
 responses:
+  utter_ask_book_title: 
+  - text: "Do you have a book you'd like to search for?"
   utter_ask_author:
-    - text: "What author would you like me to search for?"
+  - text: "What author would you like me to search for?"
   utter_give_book:
-    - text: "I found [book_reccomendation], would you like more information?"
+  - text: "I think you'd like {book_recommendation}."
+  utter_ask_wants_description: 
+  - text: "Would you like to learn more about it?"
+  utter_give_description:
+  - text: "Here's a little about {book_recommendation}: {book_description}"
   utter_give_game_changers:
-    - text: "Seeing as you're a fun person that wants to be surprised,  I recommend Game Changer by Rachel Reid, my favourite book!!!"
-  
+  - text: "Seeing as you're a fun person that wants to be surprised,  I recommend Game Changer by Rachel Reid, my favourite book!!!"
+  utter_ask_location:
+    - text: "Where are you?"
+  utter_give_location:
+    - text: "Shopping local is always best, be sure to pick it up at Shakespeare and Company, [location]"
+  utter_give_hours:
+    - text: "The bookstore is open from 10am to 8pm Monday-Saturday"
 
 actions:
   - action_get_random_author
+  - action_get_description
   - action_get_book_of_similar_genre
   - action_get_book_other_people_liked
