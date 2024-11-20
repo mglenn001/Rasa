@@ -5,7 +5,7 @@ slots:
     type: text
   book_description:
     type: text
-  book_title:
+  book_request:
     type: text
     mappings:
     - type: from_llm
@@ -20,9 +20,14 @@ slots:
   location:
     type: text
 
+forms:
+  restaurant_form:
+    required_slots:
+        - wants_description
+
 responses:
-  utter_ask_book_title: 
-  - text: "Do you have a book you'd like to search for?"
+  utter_ask_book_request: 
+  - text: "Do you have a book in mind?"
   utter_ask_author:
   - text: "What author would you like me to search for?"
   utter_give_book:
@@ -30,7 +35,7 @@ responses:
   utter_ask_wants_description: 
   - text: "Would you like to learn more about it?"
   utter_give_description:
-  - text: "Here's a little about {book_recommendation}: {book_description}"
+  - text: "Here's a little about {book_request}: {book_description}"
   utter_give_game_changers:
   - text: "Seeing as you're a fun person that wants to be surprised,  I recommend Game Changer by Rachel Reid, my favourite book!!!"
   utter_ask_location:

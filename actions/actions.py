@@ -120,7 +120,7 @@ class ActionGetDescription(Action):
     ) -> List[Dict[Text, Any]]:
         api_seed_url = "https://openlibrary.org/"
         api_search_url = "https://openlibrary.org/search.json"
-        book = tracker.get_slot("book_recommendation")
+        book = tracker.get_slot("book_request")
 
         params = {
             "q": f"title:{book}",  # Search for the book by title
