@@ -5,6 +5,12 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
+# ML model libraries
+import os
+import pandas as pd
+from scipy.sparse import csr_matrix
+from sklearn.neighbors import NearestNeighbors
+
 
 class ActionCheckSufficientFunds(Action):
     def name(self) -> Text:
@@ -191,3 +197,80 @@ class ActionGetSimilarGenre(Action):
 
         except requests.exceptions.RequestException as e:
             return [SlotSet("book_recommendation", None)]        
+        
+class ActionRecommendLiked(Action):
+    def name(self) -> Text:
+        return "action_get_book_others_liked"
+    
+    def __init__(self):
+        #base_dir = os.path.dirname(os.path.abspath(__file__))  # Get current script's directory
+        books_file = os.path.join("db", "Books.csv")
+        ratings_file = os.path.join("db", "Ratings.csv")
+
+        # Load books dataset
+        self.df_books = pd.read_csv(books_file)[['ISBN', 'Book-Title', 'Book-Author']]
+        self.df_books.dropna(inplace=True)
+
+        # Load and clean ratings dataset
+        df_ratings = pd.read_csv(ratings_file)
+        user_ratings = df_ratings['User-ID'].value_counts()
+        df_ratings = df_ratings[~df_ratings['User-ID'].isin(user_ratings[user_ratings < 200].index)]
+
+        book_ratings = df_ratings['ISBN'].value_counts()
+        self.df_ratings = df_ratings[~df_ratings['ISBN'].isin(book_ratings[book_ratings < 100].index)]
+
+        # Create the user-item matrix
+        df = self.df_ratings.pivot_table(index=['User-ID'], columns=['ISBN'], values='Book-Rating').fillna(0).T
+        df.index = df.join(self.df_books.set_index('ISBN'))['Book-Title']
+        self.df = df.sort_index()
+
+        # Train the recommendation model
+        self.model = NearestNeighbors(metric='cosine')
+        self.model.fit(self.df.values)
+
+    def get_recommends(self, title: str) -> List[Dict[str, Any]]:
+        # Find matching books by title
+        matching_books = self.df[self.df.index.str.contains(title, case=False, na=False)]
+        if matching_books.empty:
+            return []
+
+        # Use the first matching book
+        book = matching_books.iloc[0]
+        distances, indices = self.model.kneighbors([book.values], n_neighbors=4)
+
+        # Collect recommendations
+        recommended_books = [
+            {"title": self.df.iloc[idx].name, "distance": dist}
+            for dist, idx in zip(distances[0], indices[0])
+        ]
+        return recommended_books[1:]  # Exclude the input book itself
+
+    def run(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]
+    ) -> List[SlotSet]:
+        book_request = tracker.get_slot("book_request")
+        if not book_request:
+            dispatcher.utter_message(text="Please provide a book title to get recommendations.")
+            return [SlotSet("book_recommendation_1", None),
+                    SlotSet("book_recommendation_2", None),
+                    SlotSet("book_recommendation_3", None)]
+
+        # Get recommendations
+        recommendations = self.get_recommends(book_request)
+        if not recommendations:
+            dispatcher.utter_message(text=f"Sorry, I couldn't find recommendations for '{book_request}'.")
+            return [SlotSet("book_recommendation_1", None),
+                    SlotSet("book_recommendation_2", None),
+                    SlotSet("book_recommendation_3", None)]
+
+        # Set slots with recommendations
+        for i in range(3):
+            slot_name = f"book_recommendation_{i + 1}"
+            slot_value = recommendations[i]["title"] if i < len(recommendations) else None
+            SlotSet(slot_name, slot_value)
+
+        return [
+            SlotSet("book_recommendation_1", recommendations[0]["title"] if len(recommendations) > 0 else None),
+            SlotSet("book_recommendation_2", recommendations[1]["title"] if len(recommendations) > 1 else None),
+            SlotSet("book_recommendation_3", recommendations[2]["title"] if len(recommendations) > 2 else None),
+        ]

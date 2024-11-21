@@ -70,4 +70,4 @@ actions:
   - action_get_random_author
   - action_get_description
   - action_get_book_of_similar_genre
-  - action_get_book_other_people_liked
+  - action_get_book_others_liked

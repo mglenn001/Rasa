@@ -3,6 +3,7 @@ flows:
     description: this is the flow for the initial greeting. It gives the user a few options for how they'd like to interact with the bot. 
     steps:
     - action: utter_welcome
+
   recommend_book_by_author:
     description: this flow recommends the user a book written by the author they provide
     steps:
@@ -19,6 +20,7 @@ flows:
                 - wants_description: null
                 next: END
           - else: END
+
   recommend_book_of_similar_genre:
     description: this flow recommends the user a book that is is similar to a book they provide
     steps:
@@ -35,25 +37,27 @@ flows:
                 - wants_description: null
                 next: END
           - else: END
+
   get_book_description: 
     description: this flow fetches book descriptions (i.e. more information about a book) from the OpenLibrary API, based on a book title the user provides
     steps: 
       - collect: book_description_request
+        ask_before_filling: true
       - action: action_get_description
       - action: utter_give_description
 
-  # recommend_book_other_people_liked:
-  #   description: this flow recommends a book that people who enjoyed the book the user provides, also enjoyed
-  #   steps:
-  #     - collect: book_request
-  #     - action: action_get_book_other_people_liked
-  #     - action: utter_give_book
+  recommend_book_other_people_liked:
+    description: this flow recommends a book that people who enjoyed the book the user provides, also enjoyed
+    steps:
+      - collect: book_request
+      - action: action_get_book_others_liked
+      - action: utter_give_three_books
 
-  # recommend_surprise:
-  #   description: This flow gives a book recommendation if the user asks to be surprised
-  #   steps:
-  #     - action: utter_give_game_changers
-  
+  recommend_surprise:
+    description: This flow gives a book recommendation if the user asks to be surprised
+    steps:
+      - action: utter_give_game_changers
+
   # recommend_book_by_similar_author:
   #   description: this flow reccomends the user a book by an author of a similar style as an author they provide
   #   steps:
