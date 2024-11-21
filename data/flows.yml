@@ -1,36 +1,46 @@
 flows:
-  ask_random_author:
-    description: this flow reccomends the user a book written by the author they provide
+  starter_flow: 
+    description: this is the flow for the initial greeting. It gives the user a few options for how they'd like to interact with the bot. 
+    steps:
+    - action: utter_welcome
+  recommend_book_by_author:
+    description: this flow recommends the user a book written by the author they provide
     steps:
       - collect: author
       - action: action_get_random_author
-      - action: utter_give_book
+      - action: utter_give_single_book
       - collect: wants_description
+        ask_before_filling: true
         next: 
           - if: slots.wants_description == true
             then: 
               - call: get_book_description
+              - set_slots:
+                - wants_description: null
                 next: END
           - else: END
-  get_book_description: 
-    description: this flow fetches book descriptions from the OpenLibrary API, based on a book title the user provides
-    steps: 
-      - collect: book_request
-      - action: action_get_description
-      - action: utter_give_description
   recommend_book_of_similar_genre:
     description: this flow recommends the user a book that is is similar to a book they provide
     steps:
       - collect: book_request
       - action: action_get_book_of_similar_genre
-      - action: utter_give_book
+      - action: utter_give_three_books
       - collect: wants_description
+        ask_before_filling: true
         next: 
-          - if: slots.wants_description
+          - if: slots.wants_description == true
             then: 
               - call: get_book_description
+              - set_slots:
+                - wants_description: null
                 next: END
           - else: END
+  get_book_description: 
+    description: this flow fetches book descriptions (i.e. more information about a book) from the OpenLibrary API, based on a book title the user provides
+    steps: 
+      - collect: book_description_request
+      - action: action_get_description
+      - action: utter_give_description
 
   # recommend_book_other_people_liked:
   #   description: this flow recommends a book that people who enjoyed the book the user provides, also enjoyed

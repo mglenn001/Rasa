@@ -1,10 +1,26 @@
 version: "3.1"
 
 slots:
-  book_recommendation:
+  book_recommendation_1:
     type: text
+    mappings:
+    - type: from_llm
+  book_recommendation_2:
+    type: text
+    mappings:
+    - type: from_llm
+  book_recommendation_3:
+    type: text
+    mappings:
+    - type: from_llm
   book_description:
     type: text
+    mappings:
+    - type: from_llm
+  book_description_request:
+    type: text
+    mappings:
+    - type: from_llm
   book_request:
     type: text
     mappings:
@@ -19,25 +35,30 @@ slots:
     - type: from_llm
   location:
     type: text
-
-forms:
-  restaurant_form:
-    required_slots:
-        - wants_description
+    mappings:
+    - type: from_llm
 
 responses:
+  utter_welcome: 
+  - text: "Hello! I'm Jaeden, your book recommender assistant. I'm so excited to help you discover a new book today!"
   utter_ask_book_request: 
   - text: "Do you have a book in mind?"
+  utter_ask_book_description_request: 
+  - text: "What book do you want to learn more about?"
   utter_ask_author:
   - text: "What author would you like me to search for?"
   utter_give_book:
-  - text: "I think you'd like {book_recommendation}."
+  - text: "I think you'd like {book_recommendation_1}."
+  utter_give_single_book:
+  - text: "I think you'd like {book_recommendation_1}."
+  utter_give_three_books:
+  - text: "I think you'd like {book_recommendation_1}, {book_recommendation_2}, or {book_recommendation_3}."
   utter_ask_wants_description: 
-  - text: "Would you like to learn more about it?"
+  - text: "Would you like to learn more?"
   utter_give_description:
-  - text: "Here's a little about {book_request}: {book_description}"
+  - text: "Here's a little about {book_description_request}: {book_description}"
   utter_give_game_changers:
-  - text: "Seeing as you're a fun person that wants to be surprised,  I recommend Game Changer by Rachel Reid, my favourite book!!!"
+  - text: "Seeing as you're a fun person that wants to be surprised, I recommend Game Changer by Rachel Reid, my favourite book!!!"
   utter_ask_location:
     - text: "Where are you?"
   utter_give_location:
