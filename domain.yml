@@ -29,6 +29,14 @@ slots:
     type: text
     mappings: 
     - type: from_llm
+  genre:
+    type: text
+    mappings:
+    - type: from_llm
+  place:
+    type: text
+    mappings: 
+    - type: from_llm
   wants_description:
     type: bool
     mappings:
@@ -47,8 +55,10 @@ responses:
   - text: "What book do you want to learn more about?"
   utter_ask_author:
   - text: "What author would you like me to search for?"
-  utter_give_book:
-  - text: "I think you'd like {book_recommendation_1}."
+  utter_ask_genre: 
+  - text: "What genre are you looking for? I can recommend anything from classics to contemporary fiction, fantasy, biographies, or even poetry! If you also have a specific subject in mind, like 20th century history, we can also find something for it!"
+  utter_ask_place:
+  - text: "Tell me the name of a city or a country, and I'll find books set there!"
   utter_give_single_book:
   - text: "I think you'd like {book_recommendation_1}."
   utter_give_three_books:
@@ -60,14 +70,18 @@ responses:
   utter_give_game_changers:
   - text: "Seeing as you're a fun person that wants to be surprised, I recommend Game Changer by Rachel Reid, my favourite book!!!"
   utter_ask_location:
-    - text: "Where are you?"
+  - text: "Where are you?"
   utter_give_location:
-    - text: "Shopping local is always best, be sure to pick it up at Shakespeare and Company, [location]"
+  - text: "Shopping local is always best, be sure to pick it up at Shakespeare and Company, [location]"
   utter_give_hours:
-    - text: "The bookstore is open from 10am to 8pm Monday-Saturday"
+  - text: "The bookstore is open from 10am to 8pm Monday-Saturday"
+  utter_goodbye: 
+  - text: "Bye for now! I'll be here whenever you need your next book recommendation."
 
 actions:
   - action_get_random_author
   - action_get_description
   - action_get_book_of_similar_genre
   - action_get_book_others_liked
+  - action_get_book_by_genre
+  - action_get_book_by_place

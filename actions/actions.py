@@ -80,7 +80,7 @@ class ActionGetDescription(Action):
     ) -> List[Dict[Text, Any]]:
         api_seed_url = "https://openlibrary.org/"
         api_search_url = "https://openlibrary.org/search.json"
-        book = tracker.get_slot("book_request")
+        book = tracker.get_slot("book_description_request")
 
         params = {
             "q": f"title:{book}",  # Search for the book by title
@@ -274,3 +274,109 @@ class ActionRecommendLiked(Action):
             SlotSet("book_recommendation_2", recommendations[1]["title"] if len(recommendations) > 1 else None),
             SlotSet("book_recommendation_3", recommendations[2]["title"] if len(recommendations) > 2 else None),
         ]
+    
+class ActionGetBookByGenre(Action):
+    def name(self) -> Text:
+        return "action_get_book_by_genre"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        api_search_url = "https://openlibrary.org/search.json"
+        genre = tracker.get_slot("genre")
+
+        params = {
+            "q": f"subject:{genre}",  # Example search query
+            "lang": "en",
+            "sort": "rating"
+        }
+
+        try:
+            # Make the API request
+            response = requests.get(api_search_url, params=params)
+            response.raise_for_status()  # Raise an error for bad responses
+            
+            # Parse the JSON response
+            volumes = response.json()["docs"][:20]
+
+            if volumes:
+                dispatcher.utter_message(text=f"I found {genre} books!")
+                
+                # Get 3 random books from the list (if there are fewer than 3, return what is available)
+                random_books = random.sample(volumes, min(3, len(volumes)))
+
+                recommendations = []
+                for book in random_books:  
+                    title = book.get("title", "Unknown Title")
+                    author_name = book.get("author_name", ["Unknown Author"])[0]
+                    recommendations.append(f"{title} by {author_name}")                 
+
+                for i in range(3):
+                    slot_name = f"book_recommendation_{i + 1}"
+                    slot_value = recommendations[i] if i < len(recommendations) else None
+                    SlotSet(slot_name, slot_value)
+
+            return [
+                SlotSet("book_recommendation_1", recommendations[0] if len(recommendations) > 0 else None),
+                SlotSet("book_recommendation_2", recommendations[1] if len(recommendations) > 1 else None),
+                SlotSet("book_recommendation_3", recommendations[2] if len(recommendations) > 2 else None),
+            ]
+
+        except requests.exceptions.RequestException as e:
+            return [SlotSet("book_recommendation", None)]    
+        
+class ActionGetBookByPlace(Action):
+    def name(self) -> Text:
+        return "action_get_book_by_place"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        api_search_url = "https://openlibrary.org/search.json"
+        place = tracker.get_slot("place")
+
+        params = {
+            "q": f"place:{place}",  # Example search query
+            "lang": "en",
+            "sort": "rating"
+        }
+
+        try:
+            # Make the API request
+            response = requests.get(api_search_url, params=params)
+            response.raise_for_status()  # Raise an error for bad responses
+            
+            # Parse the JSON response
+            volumes = response.json()["docs"][:20]
+
+            if volumes:
+                dispatcher.utter_message(text=f"I found books set in {place}!")
+                
+                # Get 3 random books from the list (if there are fewer than 3, return what is available)
+                random_books = random.sample(volumes, min(3, len(volumes)))
+
+                recommendations = []
+                for book in random_books:  
+                    title = book.get("title", "Unknown Title")
+                    author_name = book.get("author_name", ["Unknown Author"])[0]
+                    recommendations.append(f"{title} by {author_name}")                 
+
+                for i in range(3):
+                    slot_name = f"book_recommendation_{i + 1}"
+                    slot_value = recommendations[i] if i < len(recommendations) else None
+                    SlotSet(slot_name, slot_value)
+
+            return [
+                SlotSet("book_recommendation_1", recommendations[0] if len(recommendations) > 0 else None),
+                SlotSet("book_recommendation_2", recommendations[1] if len(recommendations) > 1 else None),
+                SlotSet("book_recommendation_3", recommendations[2] if len(recommendations) > 2 else None),
+            ]
+
+        except requests.exceptions.RequestException as e:
+            return [SlotSet("book_recommendation", None)]    
