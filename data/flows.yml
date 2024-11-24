@@ -88,7 +88,14 @@ flows:
       - collect: book_description_request
         # ask_before_filling: true
       - action: action_get_description
-      - action: utter_give_description
+        next: 
+          - if: slots.book_description is null
+            then: 
+            - action: utter_fail
+              next: END
+          - else:       
+            - action: utter_give_description
+              next: END
 
   recommend_book_other_people_liked:
     description: this flow recommends a book that people who enjoyed the book the user provides, also enjoyed

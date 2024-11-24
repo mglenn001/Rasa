@@ -1,5 +1,5 @@
 Q: Who is Jaeden?
-A: Jayden is your assistant chat-bot that will help you find your next favourite read!
+A: Jaeden is your assistant chat-bot that will help you find your next favourite read!
 
 Q: What can you do for me?
 A: I can find your next read from either your favourite 
@@ -7,7 +7,7 @@ A: I can find your next read from either your favourite
 Q: How does Jaeden work?
 A: From books you've previously liked to genres you might enjoy, Jayden asks you a few questions and then triangulates through a database which books suits you best
 
-Q: Which Database does Jayden use?
+Q: Which Database does Jaeden use?
 A: Currently, I use the Openlibrary API (openlibrary.org) and https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset/data
 
 Q: What is your favourite book?
