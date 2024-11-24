@@ -78,7 +78,7 @@ class ActionGetDescription(Action):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> List[Dict[Text, Any]]:
-        api_seed_url = "https://openlibrary.org/"
+        api_seed_url = "https://openlibrary.org"
         api_search_url = "https://openlibrary.org/search.json"
         book = tracker.get_slot("book_description_request")
 
