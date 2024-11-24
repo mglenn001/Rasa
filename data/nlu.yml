@@ -1,23 +1,32 @@
-version: "3.1"
+# version: "3.1"
 
-nlu:
-- intent: greet
-  examples: |
-    - Hey
-    - Hi
-    - hey there
+# nlu:
+# - intent: get_book_description
+#   examples: |
+#     - What is {book_description_request} about? 
+#     - Can you give me the description for {book_description_request}?
 
-- intent: get_book_description
-  examples: |
-    - What is {book_description_request} about? 
-    - Can you tell me more about {book_description_request}?
-    - Can you give me the description for {book_description_request}?
+# - intent: end_flow
+#   examples: |
+#     - thank you!
+#     - goodbye
 
-- intent: end_flow
-  examples: |
-    - thank you!
-    - goodbye
+# - intent: recommend_book_other_people_liked
+#   examples: |
+#     - I recently read {book_request} and loved it. What else do people who like {book} usually like? 
 
-- intent: recommend_book_other_people_liked
-  examples: |
-    - I recently read {book_request} and loved it. What else do people who like {book} usually like? 
+# - intent: deny
+#   examples: |
+#     - no
+#     - nope
+#     - nah
+#     - not really
+#     - I don't think so
+
+# - intent: affirm
+#   examples: | 
+#     - yeah
+#     - yes
+#     - sure
+#     - yep
+#     - ok

@@ -154,4 +154,4 @@ flows:
   end_flow:
     description: this flow ends the conversation with the user, when they say goodbye. 
     steps:
-    - action: utter_goodbye    
+    - action: utter_goodbye
