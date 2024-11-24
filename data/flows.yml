@@ -13,13 +13,16 @@ flows:
       - collect: wants_description
         ask_before_filling: true
         next: 
-          - if: slots.wants_description == true
+          - if: slots.wants_description = true
             then: 
               - call: get_book_description
               - set_slots:
                 - wants_description: null
                 next: END
-          - else: END
+          - else: 
+              - set_slots:
+                - wants_description: null          
+                next: END
 
   recommend_book_of_similar_genre:
     description: this flow recommends the user a book that is is similar to a book they provide
@@ -30,13 +33,16 @@ flows:
       - collect: wants_description
         ask_before_filling: true
         next: 
-          - if: slots.wants_description == true
+          - if: slots.wants_description = true
             then: 
               - call: get_book_description
               - set_slots:
                 - wants_description: null
                 next: END
-          - else: END
+          - else: 
+              - set_slots:
+                - wants_description: null          
+                next: END
 
   recommend_book_by_genre: 
     description: this flow recommends the user popular (well-rated) books of the genre they request
@@ -47,13 +53,16 @@ flows:
       - collect: wants_description
         ask_before_filling: true
         next: 
-          - if: slots.wants_description == true
+          - if: slots.wants_description = true
             then: 
               - call: get_book_description
               - set_slots:
                 - wants_description: null
                 next: END
-          - else: END
+          - else: 
+              - set_slots:
+                - wants_description: null          
+                next: END
 
   get_book_description: 
     description: this flow fetches book descriptions (i.e. more information about a book) from the OpenLibrary API, based on a book title the user provides
@@ -75,13 +84,6 @@ flows:
     steps:
       - action: utter_give_game_changers
 
-  # recommend_book_by_similar_author:
-  #   description: this flow reccomends the user a book by an author of a similar style as an author they provide
-  #   steps:
-  #     - collect: book_request
-  #     - action: action_get_book_of_similar_genre
-  #     - action: utter_give_book
-
   recommend_book_by_place:
     description: this flow recommends the user popular (well-rated) books set in the place they request
     steps:
@@ -91,13 +93,16 @@ flows:
       - collect: wants_description
         ask_before_filling: true
         next: 
-          - if: slots.wants_description == true
+          - if: slots.wants_description = true
             then: 
               - call: get_book_description
               - set_slots:
                 - wants_description: null
                 next: END
-          - else: END 
+          - else: 
+              - set_slots:
+                - wants_description: null          
+                next: END
 
   nearest_bookstore:
     description: this flow reccomends the user where to buy the reccomended book near them
@@ -108,7 +113,13 @@ flows:
     description: this flow gives the hours of operation for the bookstore
     steps:
       - action: utter_give_hours
-  
+
+  pattern_search:
+    description: handle a knowledge-based question or request
+    name: pattern search
+    steps: 
+      - action: action_trigger_search
+
   end_flow:
     description: this flow ends the conversation with the user, when they say goodbye. 
     steps:

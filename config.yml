@@ -8,6 +8,6 @@ pipeline:
 policies:
 - name: FlowPolicy
 #- name: IntentlessPolicy
-#- name: EnterpriseSearchPolicy
+- name: EnterpriseSearchPolicy
 #- name: RulePolicy
 assistant_id: 20240916-154228-lenient-key
