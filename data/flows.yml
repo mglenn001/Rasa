@@ -9,60 +9,78 @@ flows:
     steps:
       - collect: author
       - action: action_get_random_author
-      - action: utter_give_single_book
-      - collect: wants_description
-        ask_before_filling: true
         next: 
-          - if: slots.wants_description = true
+          - if: slots.book_recommendation_1 is null
             then: 
-              - call: get_book_description
-              - set_slots:
-                - wants_description: null
-                next: END
+            - action: utter_fail
+              next: END
           - else: 
-              - set_slots:
-                - wants_description: null          
-                next: END
+            - action: utter_give_single_book
+            - collect: wants_description
+              ask_before_filling: true
+              next: 
+                - if: slots.wants_description = true
+                  then: 
+                    - call: get_book_description
+                    - set_slots:
+                      - wants_description: null
+                      next: END
+                - else: 
+                    - set_slots:
+                      - wants_description: null          
+                      next: END
 
   recommend_book_of_similar_genre:
     description: this flow recommends the user a book that is is similar to a book they provide
     steps:
       - collect: book_request
       - action: action_get_book_of_similar_genre
-      - action: utter_give_three_books
-      - collect: wants_description
-        ask_before_filling: true
-        next: 
-          - if: slots.wants_description = true
+        next:
+          - if: ((slots.book_recommendation_1 is null) AND (slots.book_recommendation_2 is null) AND (slots.book_recommendation_3 is null))
             then: 
-              - call: get_book_description
-              - set_slots:
-                - wants_description: null
-                next: END
-          - else: 
-              - set_slots:
-                - wants_description: null          
-                next: END
+            - action: utter_fail
+              next: END
+          - else:        
+            - action: utter_give_three_books
+            - collect: wants_description
+              ask_before_filling: true
+              next: 
+                - if: slots.wants_description = true
+                  then: 
+                    - call: get_book_description
+                    - set_slots:
+                      - wants_description: null
+                      next: END
+                - else: 
+                    - set_slots:
+                      - wants_description: null          
+                      next: END
 
   recommend_book_by_genre: 
     description: this flow recommends the user popular (well-rated) books of the genre they request
     steps:
       - collect: genre
       - action: action_get_book_by_genre
-      - action: utter_give_three_books
-      - collect: wants_description
-        ask_before_filling: true
-        next: 
-          - if: slots.wants_description = true
+        next:
+          - if: ((slots.book_recommendation_1 is null) AND (slots.book_recommendation_2 is null) AND (slots.book_recommendation_3 is null))
             then: 
-              - call: get_book_description
-              - set_slots:
-                - wants_description: null
-                next: END
-          - else: 
-              - set_slots:
-                - wants_description: null          
-                next: END
+            - action: utter_fail
+              next: END
+          - else:        
+            - action: utter_give_three_books
+            - collect: wants_description
+              ask_before_filling: true
+              next: 
+                - if: slots.wants_description = true
+                  then: 
+                    - call: get_book_description
+                    - set_slots:
+                      - wants_description: null
+                      next: END
+                - else: 
+                    - set_slots:
+                      - wants_description: null          
+                      next: END
 
   get_book_description: 
     description: this flow fetches book descriptions (i.e. more information about a book) from the OpenLibrary API, based on a book title the user provides
@@ -89,20 +107,26 @@ flows:
     steps:
       - collect: place
       - action: action_get_book_by_place
-      - action: utter_give_three_books
-      - collect: wants_description
-        ask_before_filling: true
-        next: 
-          - if: slots.wants_description = true
+        next:
+          - if: ((slots.book_recommendation_1 is null) AND (slots.book_recommendation_2 is null) AND (slots.book_recommendation_3 is null))
             then: 
-              - call: get_book_description
-              - set_slots:
-                - wants_description: null
-                next: END
-          - else: 
-              - set_slots:
-                - wants_description: null          
-                next: END
+            - action: utter_fail
+              next: END
+          - else:        
+            - action: utter_give_three_books
+            - collect: wants_description
+              ask_before_filling: true
+              next: 
+                - if: slots.wants_description = true
+                  then: 
+                    - call: get_book_description
+                    - set_slots:
+                      - wants_description: null
+                      next: END
+                - else: 
+                    - set_slots:
+                      - wants_description: null          
+                      next: END
 
   nearest_bookstore:
     description: this flow reccomends the user where to buy the reccomended book near them

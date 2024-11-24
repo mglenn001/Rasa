@@ -67,6 +67,8 @@ responses:
   - text: "Would you like to learn more?"
   utter_give_description:
   - text: "Here's a little about {book_description_request}: {book_description}"
+  utter_fail: 
+  - text: "I'm sorry, I couldn't find what you're looking for. I suggest coming back later... Our API is still growing, and I'd love to assist you again in the future."
   utter_give_game_changers:
   - text: "Seeing as you're a fun person that wants to be surprised, I recommend Game Changer by Rachel Reid, my favourite book!!!"
   utter_ask_location:
