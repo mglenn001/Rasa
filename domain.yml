@@ -20,6 +20,12 @@ responses:
   utter_ask_amount:
     - text: "How much money would you like to send?"
 
+  utter_ask_final_confirmation:
+    - text: "Please confirm: you want to transfer {amount} to {recipient}?"
+  
+  utter_transfer_cancelled:
+    - text: "Your transfer has been cancelled."  
+
   utter_transfer_complete:
     - text: "All done. {amount} has been sent to {recipient}."
 
