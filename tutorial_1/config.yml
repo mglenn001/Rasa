@@ -10,5 +10,6 @@ pipeline:
     active: false
 
 policies:
-  - name: FlowPolicy
+- name: FlowPolicy
 #  - name: EnterpriseSearchPolicy
+assistant_id: 20241217-171049-frozen-programming
