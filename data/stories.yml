@@ -1,0 +1,5 @@
+stories:
+  - story: generate response with OpenAssistant
+    steps:
+      - intent: ask_question
+      - action: action_openassistant_response
