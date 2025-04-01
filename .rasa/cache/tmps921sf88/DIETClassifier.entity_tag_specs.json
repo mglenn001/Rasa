@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-age_group",
+      "2": "I-age_group",
+      "3": "L-age_group",
+      "4": "U-age_group",
+      "5": "B-condition",
+      "6": "I-condition",
+      "7": "L-condition",
+      "8": "U-condition",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-age_group": 1,
+      "I-age_group": 2,
+      "L-age_group": 3,
+      "U-age_group": 4,
+      "B-condition": 5,
+      "I-condition": 6,
+      "L-condition": 7,
+      "U-condition": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]
