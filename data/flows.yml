@@ -1,0 +1,28 @@
+flows:
+  gift_recommendation:
+    description: Help users get gift recommendations for their loved ones
+    steps:
+      - collect: person_name
+        description: The name of the person to get a gift for
+        utter: utter_gather_person_name
+      - collect: person_phone
+        description: The phone number of the person
+        utter: utter_gather_person_phone
+      - collect: occasion
+        description: The occasion for the gift (eid, graduation, new_baby, marriage, new_house, without_occasion)
+        utter: utter_gather_occasion
+      - collect: talmihah_type
+        description: Whether to get recommendations with choices or without
+        utter: utter_gather_choice_info
+      - action: action_generate_result
+
+  feedback_collection:
+    description: Collect user feedback about the gift recommendations
+    steps:
+      - collect: feedback_rating
+        description: Rating from 1 to 5
+        utter: utter_gather_feedback
+      - collect: feedback_text
+        description: Optional text feedback
+        utter: utter_gather_feedback
+      - action: action_save_feedback

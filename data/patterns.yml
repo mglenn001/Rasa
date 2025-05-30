@@ -1,0 +1,24 @@
+flows:
+  pattern_validate_choice:
+    description: Pattern for validating user's choice type (image or link)
+    name: pattern validate choice
+    steps:
+      - action: action_validate_choice
+
+  pattern_validate_name:
+    description: Pattern for validating Arabic person names
+    name: pattern validate name
+    steps:
+      - action: action_validate_name
+
+  pattern_validate_phone:
+    description: Pattern for validating Saudi phone numbers
+    name: pattern validate phone
+    steps:
+      - action: action_validate_phone
+
+  pattern_validate_occasion:
+    description: Pattern for validating gift occasions
+    name: pattern validate occasion
+    steps:
+      - action: action_validate_occasion
